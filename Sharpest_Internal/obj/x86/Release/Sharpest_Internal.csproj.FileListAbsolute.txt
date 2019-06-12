@@ -1,0 +1,6 @@
+C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\bin\x86\Release\Sharpest_Internal.dll
+C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\bin\x86\Release\Sharpest_Internal.pdb
+C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\obj\x86\Release\Sharpest_Internal.csproj.CoreCompileInputs.cache
+C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\obj\x86\Release\Sharpest_Internal.dll
+C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\obj\x86\Release\Sharpest_Internal.pdb
+C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\obj\x86\Release\Sharpest_Internal.csprojResolveAssemblyReference.cache

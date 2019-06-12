@@ -1,0 +1,151 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Sharpest_Internal.SDK
+{
+    enum Inputs
+    {
+        IN_ATTACK = (1 << 0),
+        IN_JUMP = (1 << 1),
+        IN_DUCK = (1 << 2),
+        IN_FORWARD = (1 << 3),
+        IN_BACK = (1 << 4),
+        IN_USE = (1 << 5),
+        IN_CANCEL = (1 << 6),
+        IN_LEFT = (1 << 7),
+        IN_RIGHT = (1 << 8),
+        IN_MOVELEFT = (1 << 9),
+        IN_MOVERIGHT = (1 << 10),
+        IN_ATTACK2 = (1 << 11),
+        IN_RUN = (1 << 12),
+        IN_RELOAD = (1 << 13),
+        IN_ALT1 = (1 << 14),
+        IN_ALT2 = (1 << 15),
+        IN_SCORE = (1 << 16),   // Used by client.dll for when scoreboard is held down
+        IN_SPEED = (1 << 17), // Player is holding the speed key
+        IN_WALK = (1 << 18), // Player holding walk key
+        IN_ZOOM = (1 << 19), // Zoom key for HUD zoom
+        IN_WEAPON1 = (1 << 20), // weapon defines these bits
+        IN_WEAPON2 = (1 << 21), // weapon defines these bits
+        IN_BULLRUSH = (1 << 22),
+        IN_GRENADE1 = (1 << 23), // grenade 1
+        IN_GRENADE2 = (1 << 24), // grenade 2
+        IN_LOOKSPIN = (1 << 25)
+    }
+
+    public unsafe struct CUserCmdHelper
+    {
+        private int* internalPointer;
+
+        public CUserCmdHelper(int* pCmd)
+        {
+            internalPointer = pCmd;
+        }
+
+        public int GetCommandNumber()
+        {
+            return *(int*)(internalPointer + 0x04); // The cast to int* isn't strictly necessary but it keeps it consistent.
+        }
+
+        public int GetTickCount()
+        {
+            return *(int*)(internalPointer + 0x08);
+        }
+
+        public QAngle GetViewAngles()
+        {
+            // This gets super fucking dirty, but I have to build the QAngle myself because I "can't have a pointer to a managed structure".
+            float* ptrToQAngleStart = (float*)(internalPointer + 0x0C); // Kill me.
+
+            return new QAngle(ptrToQAngleStart[0], ptrToQAngleStart[1], ptrToQAngleStart[3]);
+        }
+
+        public void SetViewAngles(QAngle angAngle)
+        {
+            // This is even worse than the getter. Why Microsoft do you do this to me...
+
+            float* ptrToQAngleStart = (float*)(internalPointer + 0x0C);
+
+            ptrToQAngleStart[0] = angAngle.pitch;
+            ptrToQAngleStart[1] = angAngle.yaw;
+            ptrToQAngleStart[2] = angAngle.roll;
+        }
+
+        public Vector GetAimDirection()
+        {
+            // Same as GetViewAngles();
+            float* ptrToVectorStart = (float*)(internalPointer + 0x18);
+
+            return new Vector(ptrToVectorStart[0], ptrToVectorStart[1], ptrToVectorStart[3]);
+        }
+
+        public float GetForwardMove()
+        {
+            return *(float*)(internalPointer + 0x24);
+        }
+
+        public float GetSideMove()
+        {
+            return *(float*)(internalPointer + 0x28);
+        }
+
+        public float GetUpMove()
+        {
+            return *(float*)(internalPointer + 0x2C);
+        }
+
+        public int GetButtons()
+        {
+            return *(int*)(internalPointer + 0x30);
+        }
+
+        public void SetButtons(int iButtons)
+        {
+            *(int*)(internalPointer + 0x30) = iButtons;
+        }
+
+        public char GetImpulse()
+        {
+            return *(char*)(internalPointer + 0x34);
+        }
+
+        public int GetWeaponSelect()
+        {
+            return *(int*)(internalPointer + 0x38);
+        }
+
+        public int GetWeaponSubType()
+        {
+            return *(int*)(internalPointer + 0x3C);
+        }
+
+        int GetRandomSeed()
+        {
+            return *(int*)(internalPointer + 0x40);
+        }
+
+        public short GetMouseDirectionX()
+        {
+            return *(short*)(internalPointer + 0x44);
+        }
+
+        public short GetMouseDirectoryY()
+        {
+            return *(short*)(internalPointer + 0x46);
+        }
+
+        public bool GetPredicted()
+        {
+            return *(bool*)(internalPointer + 0x48);
+        }
+
+        public void SetPredicted(bool bPredicted)
+        {
+            *(bool*)(internalPointer + 0x48) = bPredicted;
+        }
+
+    };
+}
