@@ -55,31 +55,14 @@ namespace Sharpest_Internal.SDK
             return *(int*)(internalPointer + 0x08);
         }
 
-        public QAngle GetViewAngles()
+        public QAngle* GetViewAngles()
         {
-            // This gets super fucking dirty, but I have to build the QAngle myself because I "can't have a pointer to a managed structure".
-            float* ptrToQAngleStart = (float*)(internalPointer + 12); // Kill me.
-
-            return new QAngle(ptrToQAngleStart[0], ptrToQAngleStart[1], ptrToQAngleStart[3]);
+            return (QAngle*)(internalPointer + 12);
         }
 
-        public void SetViewAngles(QAngle angAngle)
+        public Vector* GetAimDirection()
         {
-            // This is even worse than the getter. Why Microsoft do you do this to me...
-
-            float* ptrToQAngleStart = (float*)(internalPointer + 12);
-
-            ptrToQAngleStart[0] = angAngle.pitch;
-            ptrToQAngleStart[1] = angAngle.yaw;
-            ptrToQAngleStart[2] = angAngle.roll;
-        }
-
-        public Vector GetAimDirection()
-        {
-            // Same as GetViewAngles();
-            float* ptrToVectorStart = (float*)(internalPointer + 24);
-
-            return new Vector(ptrToVectorStart[0], ptrToVectorStart[1], ptrToVectorStart[3]);
+            return (Vector*)(internalPointer + 24);
         }
 
         public float GetForwardMove()

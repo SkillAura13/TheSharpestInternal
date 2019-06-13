@@ -8,7 +8,9 @@ namespace Sharpest_Internal.SDK
 {
     public struct Vector
     {
-        public float x, y, z;
+        public float x;
+        public float y;
+        public float z;
 
         public Vector(float x, float y, float z)
         {
@@ -20,7 +22,9 @@ namespace Sharpest_Internal.SDK
 
     public struct QAngle
     {
-        public float pitch, yaw, roll;
+        public float pitch;
+        public float yaw;
+        public float roll;
 
         public QAngle(float pitch, float yaw, float roll)
         {

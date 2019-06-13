@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Sharpest_Internal.SDK.Entities;
 using System.Threading.Tasks;
 
 namespace Sharpest_Internal.Helpers
@@ -98,6 +99,11 @@ namespace Sharpest_Internal.Helpers
                 }
             }
             return null;
+        }
+
+        public static PlayerHelper GetLocalPlayer()
+        {
+            return new PlayerHelper(new IntPtr(*((int*)(Offsets.Bases.dwBaseClient + 0xCF2A3C))));
         }
     }
 }

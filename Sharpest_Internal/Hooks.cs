@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using Sharpest_Internal.SDK;
 using Sharpest_Internal.Helpers;
+using Sharpest_Internal.SDK.Entities;
 using DWORD = System.UInt32;
 
 namespace Sharpest_Internal
@@ -20,8 +21,6 @@ namespace Sharpest_Internal
     {
         // Hooks:
 
-        static bool bShot = false;
-
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         [return: MarshalAs(UnmanagedType.I1)]
         public unsafe delegate bool CreateMoveDelegate(float smt, int* pCmd);
@@ -30,27 +29,18 @@ namespace Sharpest_Internal
         {
             public CreateMoveHook(VmtTable vmt) : base(vmt, (int)Indices.CLIENTMODE_CREATE_MOVE) { }
 
-            private unsafe bool CreateMove_Hooked(float smt, int* pCmd) // I wish this could be a void* or a CUserCmd* but .NET doesn't work that way.
+            private unsafe bool CreateMove_Hooked(float smt, int* pCmd) // I wish this could be a void* or a CUserCmd* but .NET is bullshit. I have to use int* to keep IntPtr's constructor happy.
             {
                 CUserCmdHelper cmd = new CUserCmdHelper(pCmd);
 
                 if ((pCmd == null) || (cmd.GetCommandNumber() == 0))
                     return OriginalFunction(smt, pCmd);
 
-                // POC
-                if (WinAPI.GetAsyncKeyState(VirtualKeys.LeftButton))
-                {
-                    if (!bShot)
-                        WinAPI.AsyncBeep();
+                bool* bSendPacket = ((bool*)(3454329408)); // Bruteforced offset. Kill me.
 
-                    bShot = true;
-                }
-                else
-                    bShot = false;
+                Features.Misc.Fakelag.OnCreateMove(bSendPacket);
 
-                GC.KeepAlive(bShot);
-
-                return OriginalFunction(smt, pCmd);
+                return false;
             }
 
             protected override unsafe CreateMoveDelegate GetCallback()
@@ -66,9 +56,16 @@ namespace Sharpest_Internal
 
         public static void Install()
         {
+            // Get bases for modules that we need.
+            Offsets.Bases.dwBaseClient = (int)LocalProcessInfo.GetModuleBase("client_panorama.dll");
+            Offsets.Bases.dwBaseEngine = (int)LocalProcessInfo.GetModuleBase("engine.dll");
+
+            Settings.InitializeSettings();
+            Menu.MenuHelperThread.StartMenuClock();
+
             try
             {
-                IntPtr clientMode = IntPtr.Add(WinAPI.GetModuleHandle("client_panorama.dll"), 85249560);
+                IntPtr clientMode = (IntPtr)Offsets.Bases.dwBaseClient + Offsets.signatures.dwClientMode;
 
                 clientModeVMT = new Vmt32Table(clientMode);
 
