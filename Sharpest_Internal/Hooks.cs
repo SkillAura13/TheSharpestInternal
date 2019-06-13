@@ -19,7 +19,9 @@ namespace Sharpest_Internal
     static unsafe class Hooks
     {
         // Hooks:
-        
+
+        static bool bShot = false;
+
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
         [return: MarshalAs(UnmanagedType.I1)]
         public unsafe delegate bool CreateMoveDelegate(float smt, int* pCmd);
@@ -36,9 +38,17 @@ namespace Sharpest_Internal
                     return OriginalFunction(smt, pCmd);
 
                 // POC
-                QAngle vAngs = cmd.GetViewAngles();
-                vAngs.pitch = 89f;
-                cmd.SetViewAngles(vAngs);
+                if (WinAPI.GetAsyncKeyState(VirtualKeys.LeftButton))
+                {
+                    if (!bShot)
+                        WinAPI.AsyncBeep();
+
+                    bShot = true;
+                }
+                else
+                    bShot = false;
+
+                GC.KeepAlive(bShot);
 
                 return OriginalFunction(smt, pCmd);
             }
@@ -51,21 +61,40 @@ namespace Sharpest_Internal
 
         // Util functions:
 
+        static VmtTable clientModeVMT;
+        static CreateMoveHook cmHook;
+
         public static void Install()
         {
             try
             {
-                IntPtr clientMode = new IntPtr(*(int**)(Utils.PatternScan((void*)WinAPI.GetModuleHandle("client_panorama.dll"), "A1 ? ? ? ? 8B 80 ? ? ? ? 5D") + 1));
-                WinAPI.MessageBoxW(WinAPI.NULL, "Address of ClientMode: " + clientMode.ToString(), "Offset dumper", 0);
+                IntPtr clientMode = IntPtr.Add(WinAPI.GetModuleHandle("client_panorama.dll"), 85249560);
 
-                VmtTable clientModeVMT = new Vmt32Table(clientMode);
+                clientModeVMT = new Vmt32Table(clientMode);
 
-                var cmHook = new CreateMoveHook(clientModeVMT);
+                cmHook = new CreateMoveHook(clientModeVMT);
                 cmHook.Hook();
             }
             catch (Exception ex)
             {
-                WinAPI.MessageBoxW(WinAPI.NULL, "Error: " + ex.Message, "Failed initialization", 0);
+                WinAPI.MessageBoxW(WinAPI.NULL, "Error installing hooks: " + ex.Message, "Failed initialization", 0);
+                return;
+            }
+        }
+
+        public static void Uninstall()
+        {
+            GC.KeepAlive(clientModeVMT); // Fuck .NET
+            GC.KeepAlive(cmHook);
+
+            try
+            {
+                cmHook.Dispose();
+                clientModeVMT.Dispose();
+            }
+            catch (Exception ex)
+            {
+                WinAPI.MessageBoxW(WinAPI.NULL, "Error uninstalling hooks: " + ex.Message, "Failed de-initialization", 0);
                 return;
             }
         }

@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static Sharpest_Internal.DllActionFlags;
 
 using DWORD = System.UInt32;
 
@@ -13,12 +12,13 @@ using DWORD = System.UInt32;
 
 namespace Sharpest_Internal
 {
-    public unsafe class InjectHandler
+    public static class LoadHandler
     {
-        [DllExport("EntryHandler", CallingConvention.Winapi)]
-        static void DllEntryHandler()
+        [DllExport("LoadHandler", CallingConvention.StdCall)]
+        public static void LoadCheat()
         {
-            Hooks.Install();
+            System.Threading.Thread nThread = new System.Threading.Thread(Hooks.Install);
+            nThread.Start();
         }
     }
 }

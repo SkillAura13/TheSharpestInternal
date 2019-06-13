@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sharpest_Internal.SDK
 {
-    enum Inputs
+    public enum Inputs
     {
         IN_ATTACK = (1 << 0),
         IN_JUMP = (1 << 1),
@@ -58,7 +58,7 @@ namespace Sharpest_Internal.SDK
         public QAngle GetViewAngles()
         {
             // This gets super fucking dirty, but I have to build the QAngle myself because I "can't have a pointer to a managed structure".
-            float* ptrToQAngleStart = (float*)(internalPointer + 0x0C); // Kill me.
+            float* ptrToQAngleStart = (float*)(internalPointer + 12); // Kill me.
 
             return new QAngle(ptrToQAngleStart[0], ptrToQAngleStart[1], ptrToQAngleStart[3]);
         }
@@ -67,7 +67,7 @@ namespace Sharpest_Internal.SDK
         {
             // This is even worse than the getter. Why Microsoft do you do this to me...
 
-            float* ptrToQAngleStart = (float*)(internalPointer + 0x0C);
+            float* ptrToQAngleStart = (float*)(internalPointer + 12);
 
             ptrToQAngleStart[0] = angAngle.pitch;
             ptrToQAngleStart[1] = angAngle.yaw;
@@ -77,74 +77,82 @@ namespace Sharpest_Internal.SDK
         public Vector GetAimDirection()
         {
             // Same as GetViewAngles();
-            float* ptrToVectorStart = (float*)(internalPointer + 0x18);
+            float* ptrToVectorStart = (float*)(internalPointer + 24);
 
             return new Vector(ptrToVectorStart[0], ptrToVectorStart[1], ptrToVectorStart[3]);
         }
 
         public float GetForwardMove()
         {
-            return *(float*)(internalPointer + 0x24);
+            return *(float*)(internalPointer + 36);
         }
 
         public float GetSideMove()
         {
-            return *(float*)(internalPointer + 0x28);
+            return *(float*)(internalPointer + 40);
         }
 
         public float GetUpMove()
         {
-            return *(float*)(internalPointer + 0x2C);
+            return *(float*)(internalPointer + 44);
         }
 
-        public int GetButtons()
+        public Inputs GetButtons()
         {
-            return *(int*)(internalPointer + 0x30);
+            return *(Inputs*)(internalPointer + 48);
         }
 
         public void SetButtons(int iButtons)
         {
-            *(int*)(internalPointer + 0x30) = iButtons;
+            *(int*)(internalPointer + 48) = iButtons;
         }
 
         public char GetImpulse()
         {
-            return *(char*)(internalPointer + 0x34);
+            return *(char*)(internalPointer + 52);
         }
 
         public int GetWeaponSelect()
         {
-            return *(int*)(internalPointer + 0x38);
+            return *(int*)(internalPointer + 53);
         }
 
         public int GetWeaponSubType()
         {
-            return *(int*)(internalPointer + 0x3C);
+            return *(int*)(internalPointer + 57);
         }
 
         int GetRandomSeed()
         {
-            return *(int*)(internalPointer + 0x40);
+            return *(int*)(internalPointer + 61);
         }
 
         public short GetMouseDirectionX()
         {
-            return *(short*)(internalPointer + 0x44);
+            return *(short*)(internalPointer + 65);
         }
 
         public short GetMouseDirectoryY()
         {
-            return *(short*)(internalPointer + 0x46);
+            return *(short*)(internalPointer + 69);
         }
 
         public bool GetPredicted()
         {
-            return *(bool*)(internalPointer + 0x48);
+            return *(bool*)(internalPointer + 73);
         }
 
         public void SetPredicted(bool bPredicted)
         {
-            *(bool*)(internalPointer + 0x48) = bPredicted;
+            *(bool*)(internalPointer + 73) = bPredicted;
+        }
+
+        public bool ButtonPressedInCmd(Inputs iButtons)
+        {
+            if ((GetButtons() & iButtons) == 0)
+                return false;
+            else
+                return true;
         }
 
     };
