@@ -14,7 +14,8 @@ namespace Sharpest_Internal
 {
     public enum Indices
     {
-        CLIENTMODE_CREATE_MOVE = 24
+        CLIENTMODE_CREATE_MOVE = 24,
+        CHLCLIENT_CREATE_MOVE = 22
     }
 
     static unsafe class Hooks
@@ -36,9 +37,29 @@ namespace Sharpest_Internal
                 if ((pCmd == null) || (cmd.GetCommandNumber() == 0))
                     return OriginalFunction(smt, pCmd);
 
-                bool* bSendPacket = ((bool*)(3454329408)); // Bruteforced offset. Kill me.
+                if (cmd.GetForwardMove() > 0)
+                {
+                    *cmd.GetButtons() |= Inputs.IN_BACK;
+                    *cmd.GetButtons() &= ~Inputs.IN_FORWARD;
+                }
 
-                Features.Misc.Fakelag.OnCreateMove(bSendPacket);
+                if (cmd.GetForwardMove() < 0)
+                {
+                    *cmd.GetButtons() |= Inputs.IN_FORWARD;
+                    *cmd.GetButtons() &= ~Inputs.IN_BACK;
+                }
+
+                if (cmd.GetForwardMove() < 0)
+                {
+                    *cmd.GetButtons() |= Inputs.IN_MOVERIGHT;
+                    *cmd.GetButtons() &= ~Inputs.IN_MOVELEFT;
+                }
+
+                if (cmd.GetForwardMove() > 0)
+                {
+                    *cmd.GetButtons() |= Inputs.IN_MOVELEFT;
+                    *cmd.GetButtons() &= ~Inputs.IN_MOVERIGHT;
+                }
 
                 return false;
             }
@@ -75,23 +96,6 @@ namespace Sharpest_Internal
             catch (Exception ex)
             {
                 WinAPI.MessageBoxW(WinAPI.NULL, "Error installing hooks: " + ex.Message, "Failed initialization", 0);
-                return;
-            }
-        }
-
-        public static void Uninstall()
-        {
-            GC.KeepAlive(clientModeVMT); // Fuck .NET
-            GC.KeepAlive(cmHook);
-
-            try
-            {
-                cmHook.Dispose();
-                clientModeVMT.Dispose();
-            }
-            catch (Exception ex)
-            {
-                WinAPI.MessageBoxW(WinAPI.NULL, "Error uninstalling hooks: " + ex.Message, "Failed de-initialization", 0);
                 return;
             }
         }

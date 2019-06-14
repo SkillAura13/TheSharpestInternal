@@ -9,23 +9,20 @@ namespace Sharpest_Internal.Features.Misc
 {
     public static unsafe class Fakelag
     {
-        static int iTicksChoked = 0;
         public static void OnCreateMove(bool* bSendPacket)
         {
             if (!(bool)Settings.ReadSetting("fakelag_enabled"))
                 return;
 
-            GC.KeepAlive(iTicksChoked);
-
             int iTicks = 12;
 
-            if (iTicksChoked < iTicks)
+            if (InfoSaver.iTicksChoked < iTicks)
             {
-                iTicksChoked++;
+                InfoSaver.iTicksChoked += 1;
                 *bSendPacket = false;
             }
             else
-                iTicksChoked = 0;
+                InfoSaver.iTicksChoked = 0;
         }
     }
 }

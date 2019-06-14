@@ -9,7 +9,7 @@ namespace Sharpest_Internal.SDK
 {
     public unsafe class ClientState
     {
-        static IntPtr internalPointer = (IntPtr)Offsets.Bases.dwBaseEngine + 0x58CCFC;
+        static IntPtr internalPointer = (IntPtr)Offsets.signatures.dwClientState;
 
         public static QAngle* GetViewAngles()
         {

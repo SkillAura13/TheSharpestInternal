@@ -93,6 +93,7 @@ namespace Sharpest_Internal.Helpers
         public static class signatures
         {
             public const Int32 dwClientMode = 0x514CE18; // Can't catch me now!
+            public const Int32 dwCHLClient = 0x4CFF778;
             public const Int32 clientstate_choked_commands = 0x4D28;
             public const Int32 clientstate_delta_ticks = 0x174;
             public const Int32 clientstate_last_outgoing_command = 0x4D24;

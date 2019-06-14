@@ -57,85 +57,32 @@ namespace Sharpest_Internal.SDK
 
         public QAngle* GetViewAngles()
         {
-            return (QAngle*)(internalPointer + 12);
+            return (QAngle*)(internalPointer + 0x0C);
         }
 
         public Vector* GetAimDirection()
         {
-            return (Vector*)(internalPointer + 24);
+            return (Vector*)(internalPointer + 0x18);
         }
 
         public float GetForwardMove()
         {
-            return *(float*)(internalPointer + 36);
+            return *(float*)(internalPointer + 0x24);
         }
 
         public float GetSideMove()
         {
-            return *(float*)(internalPointer + 40);
+            return *(float*)(internalPointer + 0x28);
         }
-
         public float GetUpMove()
         {
-            return *(float*)(internalPointer + 44);
+            return *(float*)(internalPointer + 0x2C);
         }
 
-        public Inputs GetButtons()
-        {
-            return *(Inputs*)(internalPointer + 48);
-        }
 
-        public void SetButtons(int iButtons)
+        public Inputs *GetButtons()
         {
-            *(int*)(internalPointer + 48) = iButtons;
-        }
-
-        public char GetImpulse()
-        {
-            return *(char*)(internalPointer + 52);
-        }
-
-        public int GetWeaponSelect()
-        {
-            return *(int*)(internalPointer + 53);
-        }
-
-        public int GetWeaponSubType()
-        {
-            return *(int*)(internalPointer + 57);
-        }
-
-        int GetRandomSeed()
-        {
-            return *(int*)(internalPointer + 61);
-        }
-
-        public short GetMouseDirectionX()
-        {
-            return *(short*)(internalPointer + 65);
-        }
-
-        public short GetMouseDirectoryY()
-        {
-            return *(short*)(internalPointer + 69);
-        }
-
-        public bool GetPredicted()
-        {
-            return *(bool*)(internalPointer + 73);
-        }
-
-        public void SetPredicted(bool bPredicted)
-        {
-            *(bool*)(internalPointer + 73) = bPredicted;
-        }
-
-        public bool ButtonPressedInCmd(Inputs iButtons)
-        {
-            if ((GetButtons() & iButtons) == 0)
-                return false;
-            else
-                return true;
+            return (Inputs*)(internalPointer + 0x30);
         }
 
     };

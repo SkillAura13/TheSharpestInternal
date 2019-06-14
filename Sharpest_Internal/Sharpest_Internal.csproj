@@ -82,6 +82,7 @@
     <Compile Include="Helpers\Offsets.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Hooks.cs" />
+    <Compile Include="InfoSaver.cs" />
     <Compile Include="InjectHandler.cs" />
     <Compile Include="Menu\MenuHelperThread.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
