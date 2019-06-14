@@ -77,7 +77,10 @@
     <Compile Include="DotNetVMTHook\VMT64Table.cs" />
     <Compile Include="DotNetVMTHook\VMTHook.cs" />
     <Compile Include="DotNetVMTHook\VMTTable.cs" />
-    <Compile Include="Features\Misc\Fakelag.cs" />
+    <Compile Include="Features\Aim.cs" />
+    <Compile Include="Features\AutoJump.cs" />
+    <Compile Include="Features\AutomaticWeapons.cs" />
+    <Compile Include="Features\RCS.cs" />
     <Compile Include="Helpers\LocalProcessInfo.cs" />
     <Compile Include="Helpers\Offsets.cs" />
     <Compile Include="Helpers\Utils.cs" />
@@ -86,9 +89,9 @@
     <Compile Include="InjectHandler.cs" />
     <Compile Include="Menu\MenuHelperThread.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SDK\ClientState.cs" />
     <Compile Include="SDK\CUserCmd.cs" />
     <Compile Include="SDK\Entities\PlayerHelper.cs" />
+    <Compile Include="SDK\EntityLIst.cs" />
     <Compile Include="SDK\Spacial.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="WinAPI_Helper.cs" />
@@ -96,10 +99,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Features\Legit\" />
-    <Folder Include="Features\Rage\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="../packages/UnmanagedExports.1.2.7/tools/RGiesecke.DllExport.targets" Condition="Exists('../packages/UnmanagedExports.1.2.7/tools/RGiesecke.DllExport.targets')" />
 </Project>

@@ -1,2 +1,0 @@
-C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\obj\Debug\Sharpest_Internal.csprojResolveAssemblyReference.cache
-C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\obj\Debug\Sharpest_Internal.csproj.CoreCompileInputs.cache

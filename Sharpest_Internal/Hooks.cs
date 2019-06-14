@@ -8,6 +8,7 @@ using System.Text;
 using Sharpest_Internal.SDK;
 using Sharpest_Internal.Helpers;
 using Sharpest_Internal.SDK.Entities;
+using static Sharpest_Internal.SDK.Inputs;
 using DWORD = System.UInt32;
 
 namespace Sharpest_Internal
@@ -15,7 +16,6 @@ namespace Sharpest_Internal
     public enum Indices
     {
         CLIENTMODE_CREATE_MOVE = 24,
-        CHLCLIENT_CREATE_MOVE = 22
     }
 
     static unsafe class Hooks
@@ -30,36 +30,19 @@ namespace Sharpest_Internal
         {
             public CreateMoveHook(VmtTable vmt) : base(vmt, (int)Indices.CLIENTMODE_CREATE_MOVE) { }
 
-            private unsafe bool CreateMove_Hooked(float smt, int* pCmd) // I wish this could be a void* or a CUserCmd* but .NET is bullshit. I have to use int* to keep IntPtr's constructor happy.
+            private unsafe bool CreateMove_Hooked(float smt, int* cmd) // Framework won't let me have an argument of type CUserCmd*.
             {
-                CUserCmdHelper cmd = new CUserCmdHelper(pCmd);
+                CUserCmd* pCmd = (CUserCmd*)cmd; // I hate the .NET Framework...
 
-                if ((pCmd == null) || (cmd.GetCommandNumber() == 0))
-                    return OriginalFunction(smt, pCmd);
+                if ((pCmd == null) || (pCmd->command_number == 0) || !Utils.GetLocalPlayer().IsValid())
+                    return OriginalFunction(smt, cmd);
+                
+                InfoSaver.angEyeAngles = pCmd->viewangles;
 
-                if (cmd.GetForwardMove() > 0)
-                {
-                    *cmd.GetButtons() |= Inputs.IN_BACK;
-                    *cmd.GetButtons() &= ~Inputs.IN_FORWARD;
-                }
-
-                if (cmd.GetForwardMove() < 0)
-                {
-                    *cmd.GetButtons() |= Inputs.IN_FORWARD;
-                    *cmd.GetButtons() &= ~Inputs.IN_BACK;
-                }
-
-                if (cmd.GetForwardMove() < 0)
-                {
-                    *cmd.GetButtons() |= Inputs.IN_MOVERIGHT;
-                    *cmd.GetButtons() &= ~Inputs.IN_MOVELEFT;
-                }
-
-                if (cmd.GetForwardMove() > 0)
-                {
-                    *cmd.GetButtons() |= Inputs.IN_MOVELEFT;
-                    *cmd.GetButtons() &= ~Inputs.IN_MOVERIGHT;
-                }
+                Features.AutoJump.OnCreateMove(pCmd);
+                Features.AutomaticWeapons.OnCreateMove(pCmd);
+                Features.RCS.OnCreateMove(pCmd);
+                Features.Aim.OnCreateMove(pCmd);
 
                 return false;
             }

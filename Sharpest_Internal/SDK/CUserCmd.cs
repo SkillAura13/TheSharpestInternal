@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,54 +37,48 @@ namespace Sharpest_Internal.SDK
         IN_LOOKSPIN = (1 << 25)
     }
 
-    public unsafe struct CUserCmdHelper
+    [StructLayout(LayoutKind.Sequential)]
+    public unsafe struct CUserCmd
     {
-        private int* internalPointer;
-
-        public CUserCmdHelper(int* pCmd)
-        {
-            internalPointer = pCmd;
-        }
-
-        public int GetCommandNumber()
-        {
-            return *(int*)(internalPointer + 0x04); // The cast to int* isn't strictly necessary but it keeps it consistent.
-        }
-
-        public int GetTickCount()
-        {
-            return *(int*)(internalPointer + 0x08);
-        }
-
-        public QAngle* GetViewAngles()
-        {
-            return (QAngle*)(internalPointer + 0x0C);
-        }
-
-        public Vector* GetAimDirection()
-        {
-            return (Vector*)(internalPointer + 0x18);
-        }
-
-        public float GetForwardMove()
-        {
-            return *(float*)(internalPointer + 0x24);
-        }
-
-        public float GetSideMove()
-        {
-            return *(float*)(internalPointer + 0x28);
-        }
-        public float GetUpMove()
-        {
-            return *(float*)(internalPointer + 0x2C);
-        }
-
-
-        public Inputs *GetButtons()
-        {
-            return (Inputs*)(internalPointer + 0x30);
-        }
-
-    };
+        public int correction_pad; // Fixes unmanaged struct.
+        public int command_number;
+        public int tick_count;
+        public QAngle viewangles;
+        public Vector aimdirection;
+        public float forwardmove;
+        public float sidemove;
+        public float upmove;
+        public Inputs buttons;
+        public char impulse; 
+        public int weaponselect;
+        public int weaponsubtype; 
+        public int random_seed;
+        public short mousedx;
+        public short mousedy;
+        public bool hasbeenpredicted;
+        public char pad_add_1;
+        public char pad_add_2;
+        public char pad_add_3;
+        public char pad_add_4;
+        public char pad_add_5;
+        public char pad_add_6;
+        public char pad_add_7;
+        public char pad_add_8;
+        public char pad_add_9;
+        public char pad_add_10;
+        public char pad_add_11;
+        public char pad_add_12;
+        public char pad_add_13;
+        public char pad_add_14;
+        public char pad_add_15;
+        public char pad_add_16;
+        public char pad_add_17;
+        public char pad_add_18;
+        public char pad_add_19;
+        public char pad_add_20;
+        public char pad_add_21;
+        public char pad_add_22;
+        public char pad_add_23;
+        public char pad_add_24; // Don't you love the .NET Framework's lack of support for unmanaged arrays? Me too!
+    }
 }

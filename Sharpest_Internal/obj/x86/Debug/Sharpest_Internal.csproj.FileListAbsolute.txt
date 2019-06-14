@@ -1,5 +1,0 @@
-C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\bin\x86\Debug\Sharpest_Internal_DEBUG.dll
-C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\bin\x86\Debug\Sharpest_Internal_DEBUG.pdb
-C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\obj\x86\Debug\Sharpest_Internal.csproj.CoreCompileInputs.cache
-C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\obj\x86\Debug\Sharpest_Internal_DEBUG.dll
-C:\Users\Judah\source\repos\Sharpest_Internal\Sharpest_Internal\obj\x86\Debug\Sharpest_Internal_DEBUG.pdb

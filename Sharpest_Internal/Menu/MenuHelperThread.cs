@@ -15,41 +15,28 @@ namespace Sharpest_Internal.Menu
         static void PrintMenu()
         {
             Console.Clear();
+            Console.WriteLine("Welcome to my proof of concept C# internal!");
 
-            Console.WriteLine("Welcome to SharpestInternal, probably the first ever C# internal cheat.");
-            Console.WriteLine();
-            Console.WriteLine("Legitbot: " + Settings.ReadSetting("legit_enabled").ToString());
-            Console.WriteLine("RCS: " + Settings.ReadSetting("legit_rcs_enabled").ToString());
-            Console.WriteLine();
-            Console.WriteLine("Fake-lag: " + Settings.ReadSetting("fakelag_enabled").ToString());
+            Console.WriteLine("LocalPlayer Health: " + ((Utils.GetLocalPlayer().IsValid() && Utils.GetLocalPlayer().IsAlive()) ? Utils.GetLocalPlayer().GetHealth().ToString() :
+                "Not alive."));
+            Console.WriteLine("EyeAngles: " + InfoSaver.angEyeAngles.ToString());
         }
 
         static void MenuTick()
         {
-            while (true)
+            try
             {
-                PlayerHelper pLocal = Utils.GetLocalPlayer();
-
-                Console.Title = "Choked ticks: " + InfoSaver.iTicksChoked.ToString();
-
-                // if (pLocal.IsValid() && pLocal.IsAlive())
-                //    Console.Title = "LocalPlayer Health: " + pLocal.GetHealth().ToString();
-
-                if (WinAPI.GetAsyncKeyState(VirtualKeys.F2))
-                    Settings.WriteSetting("legit_enabled", !(bool)Settings.ReadSetting("legit_enabled"));
-
-                if (WinAPI.GetAsyncKeyState(VirtualKeys.F3))
-                    Settings.WriteSetting("legit_rcs_enabled", !(bool)Settings.ReadSetting("legit_rcs_enabled"));
-
-                if (WinAPI.GetAsyncKeyState(VirtualKeys.F4))
-                    Settings.WriteSetting("fakelag_enabled", !(bool)Settings.ReadSetting("fakelag_enabled"));
-
-                if (Settings.SettingsUpdated)
+                while (true)
+                {
                     PrintMenu();
 
-                Settings.FlushSettingsUpdated();
-
-                System.Threading.Thread.Sleep(100);
+                    System.Threading.Thread.Sleep(200);
+                }
+            }
+            catch
+            {
+                // If any of this throws an exception it means the game has been closed. "Do it, and I'll break the loop!"
+                return;
             }
         }
 
