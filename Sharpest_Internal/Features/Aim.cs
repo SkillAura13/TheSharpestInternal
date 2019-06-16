@@ -17,7 +17,7 @@ namespace Sharpest_Internal.Features
             float bestFOV = 420;
             PlayerHelper bestEntity = new PlayerHelper(IntPtr.Zero);
 
-            for (int i = 0; i < 64; i++)
+            for (int i = 0; i <= 64; i++)
             {
                 PlayerHelper pEntity = EntityList.GetClientEntity(i);
 
